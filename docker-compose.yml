@@ -3,5 +3,16 @@ services:
   redis:
     image: redis:alpine
     ports:
-      - 6379:6379
+      - "6379:6379"
 
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      REDIS_HOSTS: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 8083
+    ports:
+      - "8083:8083"
+    depends_on:
+      - redis

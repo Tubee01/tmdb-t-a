@@ -15,4 +15,7 @@ export interface ConfigVariables extends RedisConfigVariables, Pick<NodeJS.Proce
   APP_PORT: number;
   LOG_LEVEL: string;
   TMDB_API_KEY: string;
+  TMDB_API_URL: string;
+  TMDB_API_VERSION: string;
+  DEFAULT_GLOBAL_CACHE_TTL: number;
 }
