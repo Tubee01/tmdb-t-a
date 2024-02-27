@@ -41,7 +41,7 @@ import { MovieModule } from './modules/movie/movie.module';
           });
 
           store.getClient().on('error', (error) => {
-            logger.error(error, 'CacheModule');
+            logger.error(error, error.stack, 'CacheModule');
           });
 
           return store as unknown as CacheStore;

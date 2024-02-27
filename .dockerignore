@@ -1,2 +1,12 @@
-/**/node_modules
-/**/dist
+**/node_modules
+**/.git
+**/.idea
+**/.vscode
+**/.DS_Store
+**/*.log
+**/*.gz
+**/*.tgz
+**/*.zip
+**/*.rar
+**/dist
+**/build

@@ -6,7 +6,10 @@ services:
       - "6379:6379"
 
   backend:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: production-backend
     env_file:
       - .env
     environment:
@@ -16,4 +19,16 @@ services:
       - "3000:3000"
     depends_on:
       - redis
+  
+  frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: production-frontend
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      # - ORIGIN=http://test.localhost.com
+    ports:
+      - "8080:8080"
 
