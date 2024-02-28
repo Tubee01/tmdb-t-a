@@ -4,7 +4,11 @@ import type { SearchMovieResult } from './interface';
 export type ErrorMessage = 'TMDB_API_ERROR' | 'SOMETHING_WENT_WRONG' | 'MISSING_SEARCH_QUERY';
 
 export const load: PageServerLoad = async ({ fetch, url }) => {
-	if (!url.searchParams.get('query')) {
+	if (typeof url.searchParams.get('query') !== 'string') {
+		return;
+	}
+
+	if (url.searchParams.get('query') === '') {
 		return {
 			error: {
 				message: 'MISSING_SEARCH_QUERY' as ErrorMessage
