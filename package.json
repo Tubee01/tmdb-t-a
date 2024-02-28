@@ -11,7 +11,8 @@
         "build": "pnpm -r build",
         "format": "pnpm -r format",
         "lint": "pnpm -r lint",
-        "check": "pnpm -r check"
+        "check": "pnpm -r check",
+        "docker:prod": "docker compose -f docker-compose.prod.yml up -d"
     },
     "engines": {
         "node": ">=20",
