@@ -21,31 +21,24 @@ export class TmdbService {
 
     const response = await this.fetchData<SearchMovieResponse>(url);
 
-    try {
-      const returnData = plainToInstance(SearchMovieResponse, response, {
-        enableImplicitConversion: true,
-        excludeExtraneousValues: true,
-      });
+    const returnData = plainToInstance(SearchMovieResponse, response, {
+      enableImplicitConversion: true,
+      excludeExtraneousValues: true,
+    });
 
-      return returnData;
-    } catch (e) {
-      this.logger.error(e);
-
-      throw new InternalServerErrorException('TMDB_PARSE_ERROR');
-    }
+    return returnData;
   }
 
   private fetchData<T>(url: URL, searchParams: URLSearchParams = new URLSearchParams()): Promise<T> {
     const request = this.buildRequest(this.appendSearchParams(url, searchParams));
-    try {
-      this.logger.debug(`Requesting ${request.url}`);
-      return fetch(request)
-        .then((response) => response.json())
-        .finally(() => this.logger.debug(`Requesting ${request.url} finished`));
-    } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException('TMDB_API_ERROR');
-    }
+    this.logger.debug(`Requesting ${request.url}`);
+    return fetch(request)
+      .then((response) => response.json())
+      .catch((e) => {
+        this.logger.error(e);
+        throw new InternalServerErrorException('TMDB_API_ERROR');
+      })
+      .finally(() => this.logger.debug(`Requesting ${request.url} finished`));
   }
 
   private searchMovieQueryToSearchParams(query: SearchMovieQuery): URLSearchParams {

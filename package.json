@@ -6,6 +6,7 @@
     "scripts": {
         "dev": "pnpm -r start:dev",
         "dev:backend": "pnpm --filter backend start:dev",
+        "debug:backend": "pnpm --filter backend start:debug",
         "dev:frontend": "pnpm --filter frontend start:dev",
         "build": "pnpm -r build",
         "format": "pnpm -r format",

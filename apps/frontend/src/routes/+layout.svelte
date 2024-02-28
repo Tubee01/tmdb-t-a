@@ -1,5 +1,8 @@
 <script>
+	import { AppShell } from '@skeletonlabs/skeleton';
 	import '../app.pcss';
 </script>
 
-<slot />
+<AppShell>
+	<slot />
+</AppShell>
