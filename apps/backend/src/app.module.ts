@@ -1,9 +1,10 @@
 import { ConfigModule, ConfigService, Environment } from '@libs/config';
-import { Logger, Module } from '@nestjs/common';
-import { LoggerModule } from 'nestjs-pino';
+import { Logger, Module, ValidationPipe } from '@nestjs/common';
+import { LoggerErrorInterceptor, LoggerModule } from 'nestjs-pino';
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { MovieModule } from './modules/movie/movie.module';
 
 @Module({
@@ -50,6 +51,22 @@ import { MovieModule } from './modules/movie/movie.module';
       inject: [ConfigService],
     }),
     MovieModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggerErrorInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+        transform: true,
+      }),
+    },
   ],
 })
 export class AppModule {}

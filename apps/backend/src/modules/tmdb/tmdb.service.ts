@@ -24,6 +24,7 @@ export class TmdbService {
     const returnData = plainToInstance(SearchMovieResponse, response, {
       enableImplicitConversion: true,
       excludeExtraneousValues: true,
+      exposeUnsetFields: false,
     });
 
     return returnData;
@@ -33,7 +34,14 @@ export class TmdbService {
     const request = this.buildRequest(this.appendSearchParams(url, searchParams));
     this.logger.debug(`Requesting ${request.url}`);
     return fetch(request)
-      .then((response) => response.json())
+      .then(async (response) => {
+        const body = await response.json();
+        if (Reflect.has(body, 'success') && !body.success) {
+          throw body;
+        }
+
+        return body;
+      })
       .catch((e) => {
         this.logger.error(e);
         throw new InternalServerErrorException('TMDB_API_ERROR');
@@ -73,8 +81,12 @@ export class TmdbService {
   }
 
   private buildUrl(path: string, searchParams: URLSearchParams = new URLSearchParams()): URL {
-    const url = new URL([this.apiVersion, path].join('/'), this.apiUrl);
+    try {
+      const url = new URL([this.apiVersion, path].join('/'), this.apiUrl);
 
-    return this.appendSearchParams(url, searchParams);
+      return this.appendSearchParams(url, searchParams);
+    } catch (e) {
+      throw new InternalServerErrorException('INVALID_URL');
+    }
   }
 }
