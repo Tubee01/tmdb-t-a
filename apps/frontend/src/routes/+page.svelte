@@ -132,8 +132,6 @@
 						</article>
 					</div>
 				</div>
-			{:else}
-				<p class="text-center">No movies found.</p>
 			{/each}
 		</section>
 		{#if movies.length > 0 && totalPages > 1}
